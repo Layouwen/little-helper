@@ -18,7 +18,7 @@ const toggleMode = () => {
 const remainingTime = ref(0);
 const focusTime = ref(1);
 
-const setFocusTime = (e: InputEvent) => {
+const setFocusTime = (e: Event) => {
   const target = e.target as HTMLInputElement;
   const val = target.value;
   if (val) {
