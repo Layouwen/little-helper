@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Mode } from '@/components/focus-clock/types';
+import useFocusClock from '@/hooks/useFocusClock';
 import { appWindow, LogicalSize, WebviewWindow } from '@tauri-apps/api/window';
 import { computed, onMounted, ref } from 'vue';
-import { zeroFill } from '@/utils';
 
 const mode = ref(Mode.STANDARD);
 const toggleMode = () => {
@@ -15,8 +15,7 @@ const toggleMode = () => {
   }
 };
 
-const remainingTime = ref(0);
-const focusTime = ref(1);
+const {focusTime, init, focusStatus, remainingTime, showTime, start, stop} = useFocusClock();
 
 const setFocusTime = (e: Event) => {
   const target = e.target as HTMLInputElement;
@@ -28,7 +27,6 @@ const setFocusTime = (e: Event) => {
   }
 };
 
-const focusStatus = ref(false);
 const toggleFocus = () => {
   focusStatus.value = !focusStatus.value;
   if (focusStatus.value) {
@@ -38,40 +36,25 @@ const toggleFocus = () => {
   }
 };
 
-const focusTimer = ref<NodeJS.Timer>();
-
 const startFocus = () => {
   appWindow.setAlwaysOnTop(true);
-  focusTimer.value = setInterval(() => {
-    if (remainingTime.value === 0) {
-      focusStatus.value = false;
-      stopFocus();
-    } else {
-      remainingTime.value--;
-    }
-  }, 20);
+  start();
 };
 
 const initFocus = () => {
-  remainingTime.value = focusTime.value * 60;
+  init();
   appWindow.setAlwaysOnTop(false);
 };
 
 const stopFocus = () => {
-  openRest()
+  openRest();
   playAudio();
   initFocus();
-  clearInterval(focusTimer.value);
+  stop();
 };
 
 const buttonText = computed(() => {
   return focusStatus.value ? '取消专注' : '开始专注';
-});
-
-const showTime = computed(() => {
-  const m = Math.floor(remainingTime.value / 60);
-  const s = remainingTime.value % 60;
-  return [zeroFill(m), zeroFill(s)];
 });
 
 onMounted(() => {
@@ -88,7 +71,7 @@ const openRest = () => {
   const webview = new WebviewWindow('rest', {
     url: 'src/windows/rest/index.html',
   });
-  webview.setAlwaysOnTop(true)
+  webview.setAlwaysOnTop(true);
 };
 
 </script>
