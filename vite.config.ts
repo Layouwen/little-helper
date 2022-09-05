@@ -2,8 +2,8 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 
-const joinPath = (src) => {
-  return resolve(__dirname, src);
+const joinPath = (path) => {
+  return resolve('./src', path);
 };
 
 // https://vitejs.dev/config/
@@ -20,8 +20,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@/components': joinPath('./src/components'),
-      '@/utils': joinPath('./src/utils'),
+      '@': joinPath(''),
     },
   },
   // to make use of `TAURI_DEBUG` and other env variables
