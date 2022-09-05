@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Mode } from '@/components/focus-clock/types';
-import { appWindow, LogicalSize } from '@tauri-apps/api/window';
+import { appWindow, LogicalSize, WebviewWindow } from '@tauri-apps/api/window';
 import { computed, onMounted, ref } from 'vue';
 import { zeroFill } from '@/utils';
 
@@ -58,7 +58,8 @@ const initFocus = () => {
 };
 
 const stopFocus = () => {
-  playAudio()
+  openRest()
+  playAudio();
   initFocus();
   clearInterval(focusTimer.value);
 };
@@ -81,6 +82,13 @@ const playAudio = () => {
   const audio = new Audio();
   audio.src = '/src/assets/audio/bell.mp3';
   audio.play();
+};
+
+const openRest = () => {
+  const webview = new WebviewWindow('rest', {
+    url: 'src/windows/rest/index.html',
+  });
+  webview.setAlwaysOnTop(true)
 };
 
 </script>
