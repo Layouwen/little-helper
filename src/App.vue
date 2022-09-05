@@ -7,7 +7,6 @@ import Version from '@/components/version/index.vue';
 <template>
   <Container>
     <FocusClock />
-    <Version />
   </Container>
 </template>
 
