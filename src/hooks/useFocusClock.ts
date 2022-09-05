@@ -18,18 +18,20 @@ const useFocusClock = () => {
   };
 
   const start = () => {
-    focusTimer.value = setInterval(() => {
-      if (remainingTime.value === 0) {
-        focusStatus.value = false;
-        stop();
-      } else {
-        remainingTime.value--;
-      }
-    }, 1000);
+    return new Promise(resolve => {
+      focusTimer.value = setInterval(() => {
+        if (remainingTime.value === 0) {
+          focusStatus.value = false;
+          stop();
+          resolve(undefined);
+        } else {
+          remainingTime.value--;
+        }
+      }, 1000);
+    });
   };
 
   const stop = () => {
-    init();
     clearInterval(focusTimer.value);
   };
 

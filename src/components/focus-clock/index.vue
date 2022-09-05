@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { Mode } from '@/components/focus-clock/types';
 import useFocusClock from '@/hooks/useFocusClock';
+import { playAudio } from '@/utils';
 import { appWindow, LogicalSize, WebviewWindow } from '@tauri-apps/api/window';
 import { computed, onMounted, ref } from 'vue';
+
+onMounted(() => {
+  focusTime.value = 15;
+});
 
 const mode = ref(Mode.STANDARD);
 const toggleMode = () => {
@@ -38,7 +43,10 @@ const toggleFocus = () => {
 
 const startFocus = () => {
   appWindow.setAlwaysOnTop(true);
-  start();
+  start().then(() => {
+    stopFocus();
+    initFocus();
+  });
 };
 
 const initFocus = () => {
@@ -60,12 +68,6 @@ const buttonText = computed(() => {
 onMounted(() => {
   initFocus();
 });
-
-const playAudio = () => {
-  const audio = new Audio();
-  audio.src = '/src/assets/audio/bell.mp3';
-  audio.play();
-};
 
 const openRest = () => {
   const webview = new WebviewWindow('rest', {

@@ -4,3 +4,9 @@ export const zeroFill = (n: number) => {
   }
   return String(n);
 };
+
+export const playAudio = () => {
+  const audio = new Audio();
+  audio.src = '/src/assets/audio/bell.mp3';
+  void audio.play();
+};
