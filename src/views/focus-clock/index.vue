@@ -93,7 +93,6 @@ const openRest = () => {
       <button class="btn-start" @click="toggleFocus">{{ buttonText }}</button>
       <button class="btn-toggle" @click="toggleMode">切换模式</button>
     </div>
-    <Version />
   </div>
   <div class="mini" v-if="mode === Mode.MINI">
     <div class="time-number">
