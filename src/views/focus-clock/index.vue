@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Mode } from '@/components/focus-clock/types';
+import { Mode } from '@/views/focus-clock/types';
 import useFocusClock from '@/hooks/useFocusClock';
 import { playAudio } from '@/utils';
 import { appWindow, LogicalSize, WebviewWindow } from '@tauri-apps/api/window';
@@ -71,7 +71,7 @@ onMounted(() => {
 
 const openRest = () => {
   const webview = new WebviewWindow('rest', {
-    url: 'src/windows/rest/index.html',
+    url: '/#/rest',
   });
   webview.setAlwaysOnTop(true);
 };

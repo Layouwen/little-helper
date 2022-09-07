@@ -2,6 +2,7 @@
 
 <style lang="scss">
 .bw-container {
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
