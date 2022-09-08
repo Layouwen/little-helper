@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { Mode } from '@/views/focus-clock/types';
 import useFocusClock from '@/hooks/useFocusClock';
+import { FocusClockStatus } from '@/module/FocusClock';
 import { playAudio } from '@/utils';
+import { Mode } from '@/views/focus-clock/types';
+import { listen } from '@tauri-apps/api/event';
 import { appWindow, LogicalSize, WebviewWindow } from '@tauri-apps/api/window';
 import { computed, onMounted, ref } from 'vue';
-
-onMounted(() => {
-  focusTime.value = 15;
-});
 
 const mode = ref(Mode.STANDARD);
 const toggleMode = () => {
@@ -20,61 +18,49 @@ const toggleMode = () => {
   }
 };
 
-const {focusTime, init, focusStatus, remainingTime, showTime, start, stop} = useFocusClock();
+const {focusStatus, showTime, focusClock, focusTime} = useFocusClock();
 
 const setFocusTime = (e: Event) => {
   const target = e.target as HTMLInputElement;
   const val = target.value;
   if (val) {
-    const _val = Number(val);
-    focusTime.value = _val;
-    remainingTime.value = _val * 60;
+    focusTime.value = Number(val);
   }
 };
 
 const toggleFocus = () => {
-  focusStatus.value = !focusStatus.value;
-  if (focusStatus.value) {
-    startFocus();
-  } else {
+  if (focusClock.isStart()) {
     stopFocus();
+  } else {
+    startFocus();
   }
 };
 
 const startFocus = () => {
   appWindow.setAlwaysOnTop(true);
-  start().then(() => {
-    stopFocus();
-    initFocus();
-  });
+  focusClock.start();
 };
 
 const initFocus = () => {
-  init();
   appWindow.setAlwaysOnTop(false);
 };
 
 const stopFocus = () => {
-  openRest();
-  playAudio();
   initFocus();
   stop();
 };
 
 const buttonText = computed(() => {
-  return focusStatus.value ? '取消专注' : '开始专注';
+  return focusStatus.value === FocusClockStatus.START ? '取消专注' : '开始专注';
 });
 
 onMounted(() => {
   initFocus();
 });
 
-const openRest = () => {
-  const webview = new WebviewWindow('rest', {
-    url: '/#/rest',
-  });
-  webview.setAlwaysOnTop(true);
-};
+listen('resetTime', () => {
+  focusClock.init();
+});
 
 </script>
 

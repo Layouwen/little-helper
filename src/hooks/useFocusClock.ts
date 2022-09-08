@@ -1,9 +1,37 @@
+import config from '@/config';
+import FocusClock, { FocusClockStatus } from '@/module/FocusClock';
 import { zeroFill } from '@/utils';
-import { computed, ref } from 'vue';
+import { WebviewWindow } from '@tauri-apps/api/window';
+import { computed, onMounted, ref, unref, watch } from 'vue';
 
 const useFocusClock = () => {
+  const focusClock = ref<FocusClock>(new FocusClock(config.focusClock));
   const remainingTime = ref(0);
-  const focusTime = ref(1);
+  const focusStatus = ref<FocusClockStatus>(focusClock.value.getState().status);
+  const focusTime = ref(0);
+
+  onMounted(() => {
+    focusClock.value.on('init', (state: any) => {
+      focusTime.value = state.focusTime;
+      focusStatus.value = state.status;
+      remainingTime.value = state.remainingTime;
+    });
+    focusClock.value.on('update', (state: any) => {
+      focusStatus.value = state.status;
+      remainingTime.value = state.remainingTime;
+    });
+    focusClock.value.on('end', (state: any) => {
+      focusStatus.value = state.status;
+      remainingTime.value = state.remainingTime;
+      openRest();
+    });
+    focusClock.value.init();
+  });
+
+  watch(() => focusTime.value, () => {
+    focusClock.value.setFocusTime(focusTime.value);
+    remainingTime.value = focusClock.value.getState().remainingTime;
+  });
 
   const showTime = computed(() => {
     const m = Math.floor(remainingTime.value / 60);
@@ -11,39 +39,16 @@ const useFocusClock = () => {
     return [zeroFill(m), zeroFill(s)];
   });
 
-  const focusTimer = ref<NodeJS.Timer>();
-  const focusStatus = ref(false);
-  const init = () => {
-    remainingTime.value = focusTime.value * 60;
+  const openRest = () => {
+    new WebviewWindow('rest', {url: '/#/rest'});
   };
-
-  const start = () => {
-    return new Promise(resolve => {
-      focusTimer.value = setInterval(() => {
-        if (remainingTime.value === 0) {
-          focusStatus.value = false;
-          stop();
-          resolve(undefined);
-        } else {
-          remainingTime.value--;
-        }
-      }, 1000);
-    });
-  };
-
-  const stop = () => {
-    clearInterval(focusTimer.value);
-  };
-
 
   return {
+    focusClock: unref(focusClock),
     focusTime,
+    focusStatus,
     remainingTime,
     showTime,
-    start,
-    stop,
-    focusStatus,
-    init,
   };
 };
 

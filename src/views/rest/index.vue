@@ -1,24 +1,21 @@
 <script setup lang="ts">
 import useFocusClock from '@/hooks/useFocusClock';
-import { playAudio } from '@/utils';
+import { emit } from '@tauri-apps/api/event';
 import { appWindow } from '@tauri-apps/api/window';
 import { onMounted } from 'vue';
 
-const {focusTime, init: initFocus, showTime, stop, start} = useFocusClock();
+const {showTime, focusClock} = useFocusClock();
 
 const init = () => {
-  focusTime.value = 5;
-  initFocus();
-  start().then(()=>{
-    playAudio()
-  });
-
+  focusClock.init();
+  focusClock.start();
   appWindow.setAlwaysOnTop(true);
   appWindow.maximize();
 };
 
 const close = () => {
-  stop();
+  emit('resetTime');
+  focusClock.stop();
   appWindow.close();
 };
 
