@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "commit": "cz"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.0.2",
@@ -18,9 +19,15 @@
     "@tauri-apps/cli": "^1.0.5",
     "@types/node": "^18.7.10",
     "@vitejs/plugin-vue": "^3.0.1",
+    "cz-conventional-changelog": "^3.3.0",
     "sass": "^1.54.6",
     "typescript": "^4.6.4",
     "vite": "^3.0.2",
     "vue-tsc": "^0.39.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
