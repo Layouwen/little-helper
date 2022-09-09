@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import useFocusClock from '@/hooks/useFocusClock';
 import { FocusClockStatus } from '@/module/FocusClock';
-import { playAudio } from '@/utils';
 import { Mode } from '@/views/focus-clock/types';
 import { listen } from '@tauri-apps/api/event';
 import { appWindow, LogicalSize, WebviewWindow } from '@tauri-apps/api/window';
@@ -47,7 +46,7 @@ const initFocus = () => {
 
 const stopFocus = () => {
   initFocus();
-  stop();
+  focusClock.stop();
 };
 
 const buttonText = computed(() => {
