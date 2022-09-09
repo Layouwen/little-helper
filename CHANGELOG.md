@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2](///compare/v0.0.1...v0.0.2) (2022-09-09)
+
+
+### Bug Fixes
+
+* **focus-clock/index.vue:** 修复无法取消专注 3b1c4a8
+
 ### 0.0.1 (2022-09-08)
 
 
