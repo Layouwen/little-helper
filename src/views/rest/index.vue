@@ -7,6 +7,7 @@ import { onMounted } from 'vue';
 const {showTime, focusClock} = useFocusClock();
 
 const init = () => {
+  focusClock.setFocusTime(5);
   focusClock.init();
   focusClock.start();
   appWindow.setAlwaysOnTop(true);

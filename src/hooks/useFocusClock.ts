@@ -5,7 +5,7 @@ import { WebviewWindow } from '@tauri-apps/api/window';
 import { computed, onMounted, ref, unref, watch } from 'vue';
 
 const useFocusClock = () => {
-  const focusClock = ref<FocusClock>(new FocusClock(config.focusClock));
+  const focusClock = ref<FocusClock>(new FocusClock({...config.focusClock}));
   const remainingTime = ref(0);
   const focusStatus = ref<FocusClockStatus>(focusClock.value.getState().status);
   const focusTime = ref(0);
