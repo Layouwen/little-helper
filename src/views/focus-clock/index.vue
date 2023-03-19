@@ -3,7 +3,7 @@ import useFocusClock from '@/hooks/useFocusClock';
 import { FocusClockStatus } from '@/module/FocusClock';
 import { Mode } from '@/views/focus-clock/types';
 import { listen } from '@tauri-apps/api/event';
-import { appWindow, LogicalSize, WebviewWindow } from '@tauri-apps/api/window';
+import { appWindow, LogicalSize } from '@tauri-apps/api/window';
 import { computed, onMounted, ref } from 'vue';
 
 const mode = ref(Mode.STANDARD);
