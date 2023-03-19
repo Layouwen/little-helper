@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import useFocusClock from '@/hooks/useFocusClock';
-import { FocusClockStatus } from '@/module/FocusClock';
-import { Mode } from '@/views/focus-clock/types';
-import { listen } from '@tauri-apps/api/event';
-import { appWindow, LogicalSize } from '@tauri-apps/api/window';
-import { computed, onMounted, ref } from 'vue';
+import useFocusClock from "@/hooks/useFocusClock";
+import { FocusClockStatus } from "@/module/FocusClock";
+import { Mode } from "@/views/focus-clock/types";
+import { listen } from "@tauri-apps/api/event";
+import { appWindow, LogicalSize } from "@tauri-apps/api/window";
+import { computed, onMounted, ref } from "vue";
 
 const mode = ref(Mode.STANDARD);
 const toggleMode = () => {
@@ -17,7 +17,7 @@ const toggleMode = () => {
   }
 };
 
-const {focusStatus, showTime, focusClock, focusTime} = useFocusClock();
+const { focusStatus, showTime, focusClock, focusTime } = useFocusClock();
 
 const setFocusTime = (e: Event) => {
   const target = e.target as HTMLInputElement;
@@ -50,17 +50,16 @@ const stopFocus = () => {
 };
 
 const buttonText = computed(() => {
-  return focusStatus.value === FocusClockStatus.START ? '取消专注' : '开始专注';
+  return focusStatus.value === FocusClockStatus.START ? "取消专注" : "开始专注";
 });
 
 onMounted(() => {
   initFocus();
 });
 
-listen('resetTime', () => {
+listen("resetTime", () => {
   focusClock.init();
 });
-
 </script>
 
 <template>
@@ -71,7 +70,12 @@ listen('resetTime', () => {
     <div class="input-wrapper">
       <label>
         <span>专注时间：</span>
-        <input type="number" placeholder="专注时间" :value="focusTime" @input="setFocusTime" />
+        <input
+          type="number"
+          placeholder="专注时间"
+          :value="focusTime"
+          @input="setFocusTime"
+        />
       </label>
     </div>
     <div class="btn-controls">
